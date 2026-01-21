@@ -2,7 +2,7 @@ import React from 'react'
 import { BrowserRouter,Routes,Router,Link, Route } from 'react-router-dom';
 import Login from './Login';
 import Browse from './Browse';
-import { LoginContext } from '../utils/loginContext';
+import { LoginContext } from '../utils/LoginContext';
 
 const Body = () => {
   return (
