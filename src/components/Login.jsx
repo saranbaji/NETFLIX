@@ -1,8 +1,28 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import Header from './Header'
-
+import loginValidation from '../utils/loginValidation';
+import { useNavigate } from 'react-router-dom';
 const Login = () => {
   const [isSignIn,setIsSignIn] = useState(true);
+  const [errorMsg,setErrorMsg] = useState(null);
+  
+  const navigate = useNavigate();
+
+  const email = useRef(null)
+  const password = useRef(null)
+
+  const handleButtonClick = () =>{
+    const message = loginValidation(email.current.value,password.current.value)
+    setErrorMsg(message);
+    if(message==null){
+      if(email.current.value==="saranbaji@gmail.com" && password.current.value==="Saran29@"){
+        navigate("/browse")
+      }else{
+        setErrorMsg("Invalid Credentials.")
+      }
+    }
+    
+  }
   const toggleSignIn = () =>{
     setIsSignIn(!isSignIn)
   }
@@ -17,13 +37,17 @@ const Login = () => {
           <Header/>
            {/* Centered Form */}
           <div className="absolute inset-0 flex items-center justify-center">
-            <form className="relative z-10 w-100 bg-black/75 p-8 rounded-md text-white">
+            <form className="relative z-10 w-100 bg-black/75 p-8 rounded-md text-white"  onSubmit={(e) => e.preventDefault()}>
               <h1 className="text-2xl font-bold mb-6">{(isSignIn)?'Sign In':'Sign Up'}</h1>
+              
               {(!isSignIn)&&<input type="text" placeholder="Enter FullName" className="w-full mb-4 p-3 rounded bg-gray-800 outline-none"/>}
-              <input type="text" placeholder="Email or Phone Number" className="w-full mb-4 p-3 rounded bg-gray-800 outline-none"/>
-              <input type="password" placeholder="Password" className="w-full mb-6 p-3 rounded bg-gray-800 outline-none"/>
-              <button className="w-full bg-red-600 p-3 rounded font-semibold">{(isSignIn)?'Sign In':'Sign Up'}</button>
-              <p className='my-5'>{(isSignIn)?'Existing User?':'New to Netflix?'} <span onClick={toggleSignIn} className='underline hover:cursor-pointer'>{(isSignIn)?'Sign In':'Sign Up'}</span></p>
+              
+              <input ref={email} type="text" placeholder="Email or Phone Number" className="w-full mb-4 p-3 rounded bg-gray-800 outline-none"/>
+              <input ref={password} type="password" placeholder="Password" className="w-full mb-6 p-3 rounded bg-gray-800 outline-none"/>
+              
+              <p className='text-red-400 bolder'>{errorMsg}</p>
+              <button className="w-full bg-red-600 p-3 rounded font-semibold" onClick={handleButtonClick}>{(isSignIn)?'Sign In':'Sign Up'}</button>
+              <p className='my-5'>{(!isSignIn)?'Existing User?':'New to Netflix?'} <span onClick={toggleSignIn} className='underline hover:cursor-pointer'>{(!isSignIn)?'Sign In':'Sign Up'}</span></p>
             </form>
            
           </div>
